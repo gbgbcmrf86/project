@@ -100,7 +100,7 @@ variable "eks_cluster_version" {
 
 
 #-------- Deployment -----------
-variable "depends_oneployment_name" {
+variable "deployment_name" {
   description = "EKS Deployment name"
   type        = string
   default     = "dimav-php-web"
@@ -112,7 +112,7 @@ variable "deployment_image" {
   default     = "gbgbcmrf86/lesson20:v1"
 }
 
-variable "deployment_nameeployment_container_name" {
+variable "deployment_container_name" {
   description = "EKS Deployment container name"
   type        = string
   default     = "dimav-php-container"
