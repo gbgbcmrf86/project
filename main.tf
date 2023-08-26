@@ -72,7 +72,7 @@ module "eks" {
 
   # EKS Managed Node Group(s)
   eks_managed_node_group_defaults = {
-    instance_types = ["t2.micro"]
+    instance_types = var.instance_types
   }
   eks_managed_node_groups = {
     dimav_tf_ng = {
@@ -80,16 +80,13 @@ module "eks" {
       max_size     = 3
       desired_size = 2
 
-      instance_types = ["t2.micro"]
+      instance_types = var.instance_types
       #capacity_type  = "SPOT"
     }
   }
-
   create_kms_key = false
-
-  # aws-auth configmap
+  # AWS-Auth configmap
   manage_aws_auth_configmap = true
-
   aws_auth_users = [
     {
       userarn  = "arn:aws:iam::097084951758:user/alex_b"
@@ -112,7 +109,6 @@ resource "kubernetes_deployment" "dimav-php-web" {
       App = "dimav-php-web"
     }
   }
-
   spec {
     replicas = 2
     selector {
@@ -187,7 +183,7 @@ resource "helm_release" "lb" {
   ]
   set {
     name  = "region"
-    value = "us-east-1"
+    value = var.region
   }
   set {
     name  = "vpcId"
@@ -207,7 +203,7 @@ resource "helm_release" "lb" {
   }
   set {
     name  = "clusterName"
-    value = "dimav-tf-eks"
+    value = var.eks_cluster_name
   }
 }
 
@@ -228,16 +224,6 @@ resource "kubernetes_service" "web-service" {
   }
 }
 
-/* # Display load balancer hostname (typically present in AWS)
-output "load_balancer_hostname" {
-  value = kubernetes_ingress_v1.example.status.0.load_balancer.0.ingress.0.hostname
-}
-
-# Display load balancer IP (typically present in GCP, or using Nginx ingress controller)
-output "load_balancer_ip" {
-  value = kubernetes_ingress_v1.example.status.0.load_balancer.0.ingress.0.ip
-}
- */
 resource "kubernetes_ingress_v1" "dimav-ingress" {
   wait_for_load_balancer = true
   metadata {
@@ -277,3 +263,14 @@ resource "null_resource" "kubectl" {
   }
   depends_on = [module.eks]
 }
+
+/* # Display load balancer hostname (typically present in AWS)
+output "load_balancer_hostname" {
+  value = kubernetes_ingress_v1.example.status.0.load_balancer.0.ingress.0.hostname
+}
+
+# Display load balancer IP (typically present in GCP, or using Nginx ingress controller)
+output "load_balancer_ip" {
+  value = kubernetes_ingress_v1.example.status.0.load_balancer.0.ingress.0.ip
+}
+ */

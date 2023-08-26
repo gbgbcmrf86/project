@@ -4,6 +4,13 @@ variable "region" {
   value       = "us-east-1"
 }
 
+variable "instance_types" {
+  description = "Instance Type"
+  type        = list(string)
+  default     = ["t2.micro"]
+
+}
+
 # ------------- VPC -------------
 variable "azs" {
   description = "A list of availability zones names or ids in the region"
