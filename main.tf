@@ -207,7 +207,7 @@ resource "helm_release" "lb" {
   }
 }
 
-resource "kubernetes_service" "web-service" {
+resource "kubernetes_service" "dimav-php-web-service" {
   metadata {
     name = "dimav-php-web-service"
   }
@@ -225,7 +225,7 @@ resource "kubernetes_service" "web-service" {
 }
 
 resource "kubernetes_ingress_v1" "dimav-ingress" {
-  wait_for_load_balancer = true
+  #wait_for_load_balancer = true
   metadata {
     name      = "name-virtual-host-ingress"
     namespace = "default"
