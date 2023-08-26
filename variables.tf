@@ -1,7 +1,7 @@
 variable "region" {
   description = "AWS Region"
   type        = string
-  value       = "us-east-1"
+  default     = "us-east-1"
 }
 
 variable "instance_types" {
@@ -21,7 +21,7 @@ variable "azs" {
 variable "VPC_name" {
   description = "VPC name"
   type        = string
-  value       = "dimav-eks-vpc"
+  default     = "dimav-eks-vpc"
 }
 
 variable "private_subnet_tags" {
@@ -45,7 +45,7 @@ variable "public_subnet_tags" {
 variable "VPC_CIDR" {
   description = "VPC CIDR"
   type        = string
-  value       = "192.168.0.0/16"
+  default     = "192.168.0.0/16"
 }
 
 variable "public_subnets" {
@@ -98,3 +98,28 @@ variable "eks_cluster_version" {
   default     = "1.27"
 }
 
+
+#-------- Deployment -----------
+variable "depends_oneployment_name" {
+  description = "EKS Deployment name"
+  type        = string
+  default     = "dimav-php-web"
+}
+
+variable "deployment_image" {
+  description = "EKS Deployment image"
+  type        = string
+  default     = "gbgbcmrf86/lesson20:v1"
+}
+
+variable "deployment_nameeployment_container_name" {
+  description = "EKS Deployment container name"
+  type        = string
+  default     = "dimav-php-container"
+}
+
+variable "eks_service_name" {
+  description = "EKS service name"
+  type        = string
+  default     = "dimav-php-web-service"
+}

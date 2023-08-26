@@ -43,7 +43,7 @@ module "vpc" {
   public_subnets          = var.public_subnets
   private_subnet_tags     = var.private_subnet_tags
   public_subnet_tags      = var.public_subnet_tags
-  enable_nat_gateway      = var.eks_cluster_name
+  enable_nat_gateway      = var.enable_nat_gateway
   single_nat_gateway      = var.single_nat_gateway
   enable_vpn_gateway      = var.enable_vpn_gateway
   map_public_ip_on_launch = var.map_public_ip_on_launch
@@ -104,28 +104,28 @@ module "eks" {
 resource "kubernetes_deployment" "dimav-php-web" {
   #depends_on = [resource.null_resource.kubectl]
   metadata {
-    name = "dimav-php-web"
+    name = var.deployment_name
     labels = {
-      App = "dimav-php-web"
+      App = var.deployment_name
     }
   }
   spec {
     replicas = 2
     selector {
       match_labels = {
-        App = "dimav-php-web"
+        App = var.deployment_name
       }
     }
     template {
       metadata {
         labels = {
-          App = "dimav-php-web"
+          App = var.deployment_name
         }
       }
       spec {
         container {
-          image = "gbgbcmrf86/lesson20:v1"
-          name  = "dimav-php-docker"
+          image = var.deployment_image
+          name  = var.deployment_container_name
 
           port {
             container_port = 80
@@ -209,11 +209,11 @@ resource "helm_release" "lb" {
 
 resource "kubernetes_service" "dimav-php-web-service" {
   metadata {
-    name = "dimav-php-web-service"
+    name = var.eks_service_name
   }
   spec {
     selector = {
-      App = "dimav-php-web"
+      App = var.deployment_name
     }
     port {
       port        = 80
@@ -245,7 +245,7 @@ resource "kubernetes_ingress_v1" "dimav-ingress" {
           path_type = "Exact"
           backend {
             service {
-              name = "dimav-php-web-service"
+              name = var.eks_service_name
               port {
                 number = 80
               }
