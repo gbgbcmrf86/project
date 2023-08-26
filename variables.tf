@@ -7,8 +7,17 @@ variable "region" {
 variable "instance_types" {
   description = "Instance Type"
   type        = list(string)
-  default     = ["t2.micro"]
+  default     = ["t3.medium"]
 
+}
+
+variable "tags" {
+  description = "A map of tags to add to all resources"
+  type        = map(string)
+  default = {
+    Owner       = "dimav"
+    Environment = "dev"
+  }
 }
 
 # ------------- VPC -------------
@@ -118,6 +127,7 @@ variable "deployment_container_name" {
   default     = "dimav-php-container"
 }
 
+#-------- Service -----------
 variable "eks_service_name" {
   description = "EKS service name"
   type        = string

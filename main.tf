@@ -47,6 +47,7 @@ module "vpc" {
   single_nat_gateway      = var.single_nat_gateway
   enable_vpn_gateway      = var.enable_vpn_gateway
   map_public_ip_on_launch = var.map_public_ip_on_launch
+  tags                    = var.tags
 }
 
 module "eks" {
@@ -99,10 +100,10 @@ module "eks" {
       groups   = ["system:masters"]
     },
   ]
+  tags = var.tags
 }
 
 resource "kubernetes_deployment" "dimav-php-web" {
-  #depends_on = [resource.null_resource.kubectl]
   metadata {
     name = var.deployment_name
     labels = {
@@ -156,6 +157,7 @@ module "iam_iam-role-for-service-accounts-eks" {
       namespace_service_accounts = ["kube-system:aws-load-balancer-controller"]
     }
   }
+  tags = var.tags
 }
 
 resource "kubernetes_service_account" "service-account" {
@@ -225,9 +227,8 @@ resource "kubernetes_service" "dimav-php-web-service" {
 }
 
 resource "kubernetes_ingress_v1" "dimav-ingress" {
-  #wait_for_load_balancer = true
   metadata {
-    name      = "name-virtual-host-ingress"
+    name      = "dimav-deploy-ingress"
     namespace = "default"
     annotations = {
       "alb.ingress.kubernetes.io/scheme"       = "internet-facing"
@@ -235,7 +236,6 @@ resource "kubernetes_ingress_v1" "dimav-ingress" {
     }
   }
   spec {
-    #controller         = "aws-load-balancer-controller"
     ingress_class_name = "alb"
     rule {
       host = "dimav.ddns.net"
@@ -257,20 +257,10 @@ resource "kubernetes_ingress_v1" "dimav-ingress" {
   }
 }
 
+# Update kubectl config file for Lens
 resource "null_resource" "kubectl" {
   provisioner "local-exec" {
     command = "aws eks update-kubeconfig --region us-east-1 --name dimav-tf-eks"
   }
   depends_on = [module.eks]
 }
-
-/* # Display load balancer hostname (typically present in AWS)
-output "load_balancer_hostname" {
-  value = kubernetes_ingress_v1.example.status.0.load_balancer.0.ingress.0.hostname
-}
-
-# Display load balancer IP (typically present in GCP, or using Nginx ingress controller)
-output "load_balancer_ip" {
-  value = kubernetes_ingress_v1.example.status.0.load_balancer.0.ingress.0.ip
-}
- */
