@@ -1,0 +1,4 @@
+.terraform/*/*.exe
+.terraform/providers/*
+terraform.tfstate*
+terraform.lock.hcl*
