@@ -7,7 +7,7 @@ variable "region" {
 variable "instance_types" {
   description = "Instance Type"
   type        = list(string)
-  default     = ["t3.medium"]
+  default     = ["t2.micro"]
 
 }
 

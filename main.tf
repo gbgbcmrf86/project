@@ -25,6 +25,15 @@ provider "helm" {
   }
 }
 
+terraform {
+  backend "s3" {
+    bucket         = "dimav-terraform"
+    key            = "project/dev/dimav.tfstate"
+    region         = "us-east-1"
+    dynamodb_table = "dimav-lockstate"
+  }
+}
+
 locals {
   vpc_id              = module.vpc.vpc_id
   vpc_cidr            = module.vpc.vpc_cidr_block
@@ -145,7 +154,7 @@ resource "kubernetes_deployment" "dimav-php-web" {
   }
 }
 
-module "iam_iam-role-for-service-accounts-eks" {
+/* module "iam_iam-role-for-service-accounts-eks" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "5.29.0"
 
@@ -255,7 +264,7 @@ resource "kubernetes_ingress_v1" "dimav-ingress" {
       }
     }
   }
-}
+} */
 
 # Update kubectl config file for Lens
 resource "null_resource" "kubectl" {
