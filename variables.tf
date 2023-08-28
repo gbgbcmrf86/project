@@ -133,3 +133,11 @@ variable "eks_service_name" {
   type        = string
   default     = "dimav-php-web-service"
 }
+
+
+# --------ECR Repostory---------
+variable "ecr_lifecycle_policy" {
+  description = "ECR Lifecycle policy"
+  type        = string
+  default     = "{\r\n    \"rules\": [\r\n        {\r\n            \"rulePriority\": 1,\r\n            \"description\": \"Keep only one image, expire all others\",\r\n            \"selection\": {\r\n                \"tagStatus\": \"any\",\r\n                \"countType\": \"imageCountMoreThan\",\r\n                \"countNumber\": 1\r\n            },\r\n            \"action\": {\r\n                \"type\": \"expire\"\r\n            }\r\n        }\r\n    ]\r\n}"
+}
