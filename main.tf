@@ -34,15 +34,15 @@ terraform {
   }
 }
 
-/* locals {
+locals {
   vpc_id              = module.vpc.vpc_id
   vpc_cidr            = module.vpc.vpc_cidr_block
   public_subnets_ids  = module.vpc.public_subnets
   private_subnets_ids = module.vpc.private_subnets
   subnets_ids         = concat(local.public_subnets_ids, local.private_subnets_ids)
-} */
+}
 
-/* module "vpc" {
+module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
   name                    = var.VPC_name
@@ -57,7 +57,7 @@ terraform {
   enable_vpn_gateway      = var.enable_vpn_gateway
   map_public_ip_on_launch = var.map_public_ip_on_launch
   tags                    = var.tags
-} */
+}
 
 module "ecr" {
   source  = "terraform-aws-modules/ecr/aws"
@@ -69,7 +69,7 @@ module "ecr" {
   tags                          = var.tags
 }
 
-/* module "eks" {
+module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 19.0"
 
@@ -120,7 +120,7 @@ module "ecr" {
     },
   ]
   tags = var.tags
-} */
+}
 
 /* resource "kubernetes_deployment" "dimav-php-web" {
   metadata {
