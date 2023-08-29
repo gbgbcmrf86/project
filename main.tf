@@ -58,7 +58,7 @@ terraform {
   map_public_ip_on_launch = var.map_public_ip_on_launch
   tags                    = var.tags
 } */
-
+#test
 module "ecr" {
   source  = "terraform-aws-modules/ecr/aws"
   version = "1.6.0"
