@@ -89,7 +89,7 @@ module "eks" {
   }
   vpc_id     = local.vpc_id
   subnet_ids = concat(local.public_subnets_ids, local.private_subnets_ids)
-
+  #test
   # EKS Managed Node Group(s)
   eks_managed_node_group_defaults = {
     instance_types = var.instance_types
