@@ -96,7 +96,7 @@ module "eks" {
   }
   create_kms_key = false
 
-  # AWS-Auth configmap
+  # AWS-Auth configmap#
   manage_aws_auth_configmap = true
   aws_auth_users = [
     {
