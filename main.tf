@@ -95,7 +95,7 @@ module "eks" {
   create_kms_key = false
 
   # AWS-Auth configmap
-  manage_aws_auth_configmap = true
+  /* manage_aws_auth_configmap = true
   aws_auth_users = [
     {
       userarn  = "arn:aws:iam::097084951758:user/alex_b"
@@ -107,6 +107,6 @@ module "eks" {
       username = "varapai_d"
       groups   = ["system:masters"]
     },
-  ]
+  ] */
   tags = var.tags
 }
