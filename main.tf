@@ -105,8 +105,8 @@ module "eks" {
     }
   }
   create_kms_key = false
+
   # AWS-Auth configmap
-  #create_aws_auth_configmap = true
   manage_aws_auth_configmap = true
   aws_auth_users = [
     {
@@ -122,70 +122,3 @@ module "eks" {
   ]
   tags = var.tags
 }
-
-/* resource "kubernetes_deployment" "dimav-php-web" {
-  metadata {
-    name = var.deployment_name
-    labels = {
-      App = var.deployment_name
-    }
-  }
-  spec {
-    replicas = 2
-    selector {
-      match_labels = {
-        App = var.deployment_name
-      }
-    }
-    template {
-      metadata {
-        labels = {
-          App = var.deployment_name
-        }
-      }
-      spec {
-        container {
-          image = var.deployment_image
-          name  = var.deployment_container_name
-
-          port {
-            container_port = 80
-          }
-          resources {
-            limits = {
-              memory = "200Mi"
-            }
-            requests = {
-              memory = "50Mi"
-            }
-          }
-        }
-      }
-    }
-  }
-} */
-
-/* resource "kubernetes_service" "dimav-php-web-service" {
-  metadata {
-    name = var.eks_service_name
-  }
-  spec {
-    selector = {
-      App = var.deployment_name
-    }
-    port {
-      port        = 80
-      name        = "http"
-      target_port = 80
-    }
-    type = "NodePort"
-  }
-} */
-
-# Update kubectl config file for Lens
-/* resource "null_resource" "kubectl" {
-  provisioner "local-exec" {
-    command = "aws eks update-kubeconfig --region us-east-1 --name dimav-tf-eks"
-  }
-  depends_on = [module.eks]
-} */
