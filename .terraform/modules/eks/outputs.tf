@@ -56,7 +56,7 @@ output "cluster_primary_security_group_id" {
 # KMS Key
 ################################################################################
 
-/* output "kms_key_arn" {
+output "kms_key_arn" {
   description = "The Amazon Resource Name (ARN) of the key"
   value       = module.kms.key_arn
 }
@@ -70,7 +70,7 @@ output "kms_key_policy" {
   description = "The IAM resource policy set on the key"
   value       = module.kms.key_policy
 }
- */
+
 ################################################################################
 # Cluster Security Group
 ################################################################################
@@ -159,7 +159,7 @@ output "cluster_identity_providers" {
 # CloudWatch Log Group
 ################################################################################
 
-/* output "cloudwatch_log_group_name" {
+output "cloudwatch_log_group_name" {
   description = "Name of cloudwatch log group created"
   value       = try(aws_cloudwatch_log_group.this[0].name, null)
 }
@@ -167,7 +167,7 @@ output "cluster_identity_providers" {
 output "cloudwatch_log_group_arn" {
   description = "Arn of cloudwatch log group created"
   value       = try(aws_cloudwatch_log_group.this[0].arn, null)
-} */
+}
 
 ################################################################################
 # Fargate Profile

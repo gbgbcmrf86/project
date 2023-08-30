@@ -58,7 +58,7 @@ resource "aws_eks_cluster" "this" {
     }
   }
 
-  /* dynamic "encryption_config" {
+  dynamic "encryption_config" {
     # Not available on Outposts
     for_each = local.enable_cluster_encryption_config ? [var.cluster_encryption_config] : []
 
@@ -68,7 +68,7 @@ resource "aws_eks_cluster" "this" {
       }
       resources = encryption_config.value.resources
     }
-  } */
+  }
 
   tags = merge(
     var.tags,
@@ -85,7 +85,7 @@ resource "aws_eks_cluster" "this" {
     aws_iam_role_policy_attachment.this,
     aws_security_group_rule.cluster,
     aws_security_group_rule.node,
-    #aws_cloudwatch_log_group.this,
+    aws_cloudwatch_log_group.this,
     aws_iam_policy.cni_ipv6_policy,
   ]
 }
@@ -103,7 +103,7 @@ resource "aws_ec2_tag" "cluster_primary_security_group" {
   value       = each.value
 }
 
-/* resource "aws_cloudwatch_log_group" "this" {
+resource "aws_cloudwatch_log_group" "this" {
   count = local.create && var.create_cloudwatch_log_group ? 1 : 0
 
   name              = "/aws/eks/${var.cluster_name}/cluster"
@@ -114,7 +114,7 @@ resource "aws_ec2_tag" "cluster_primary_security_group" {
     var.tags,
     { Name = "/aws/eks/${var.cluster_name}/cluster" }
   )
-} */
+}
 
 ################################################################################
 # KMS Key
@@ -299,7 +299,7 @@ resource "aws_iam_role" "this" {
   # which results in the log group being re-created even after Terraform destroys it. Removing the
   # ability for the cluster role to create the log group prevents this log group from being re-created
   # outside of Terraform due to services still generating logs during destroy process
-  /* dynamic "inline_policy" {
+  dynamic "inline_policy" {
     for_each = var.create_cloudwatch_log_group ? [1] : []
     content {
       name = local.iam_role_name
@@ -315,7 +315,7 @@ resource "aws_iam_role" "this" {
         ]
       })
     }
-  } */
+  }
 
   tags = merge(var.tags, var.iam_role_tags)
 }
@@ -339,7 +339,7 @@ resource "aws_iam_role_policy_attachment" "additional" {
 }
 
 # Using separate attachment due to `The "for_each" value depends on resource attributes that cannot be determined until apply`
-/* resource "aws_iam_role_policy_attachment" "cluster_encryption" {
+resource "aws_iam_role_policy_attachment" "cluster_encryption" {
   # Encryption config not available on Outposts
   count = local.create_iam_role && var.attach_cluster_encryption_policy && local.enable_cluster_encryption_config ? 1 : 0
 
@@ -373,7 +373,7 @@ resource "aws_iam_policy" "cluster_encryption" {
   })
 
   tags = merge(var.tags, var.cluster_encryption_policy_tags)
-} */
+}
 
 ################################################################################
 # EKS Addons

@@ -107,6 +107,28 @@ variable "eks_cluster_version" {
   default     = "1.27"
 }
 
+variable "cluster_encryption_config" {
+  description = "AWS Kubernetes cluster encryprtion"
+  default     = {}
+}
+
+variable "cluster_endpoint_public_access" {
+  description = "AWS Kubernetes cluster endpoint public access"
+  type        = bool
+  default     = true
+}
+
+variable "cluster_service_ipv4_cidr" {
+  description = "AWS Kubernetes cluster service ipv4cidr"
+  type        = string
+  default     = "10.200.0.0/16"
+}
+
+variable "create_cloudwatch_log_group" {
+  description = "AWS Kubernetes cluster create cloudwatch log group"
+  type        = bool
+  default     = false
+}
 
 #-------- Deployment -----------
 variable "deployment_name" {
@@ -136,8 +158,20 @@ variable "eks_service_name" {
 
 
 # --------ECR Repostory---------
+variable "repository_name" {
+  description = "ECR Lifecycle name"
+  type        = string
+  default     = "dimav-ecr"
+}
+
 variable "ecr_lifecycle_policy" {
   description = "ECR Lifecycle policy"
   type        = string
   default     = "{\r\n    \"rules\": [\r\n        {\r\n            \"rulePriority\": 1,\r\n            \"description\": \"Keep only one image, expire all others\",\r\n            \"selection\": {\r\n                \"tagStatus\": \"any\",\r\n                \"countType\": \"imageCountMoreThan\",\r\n                \"countNumber\": 1\r\n            },\r\n            \"action\": {\r\n                \"type\": \"expire\"\r\n            }\r\n        }\r\n    ]\r\n}"
+}
+
+variable "repository_image_scan_on_push" {
+  description = "ECR repository image scan on push"
+  type        = bool
+  default     = false
 }

@@ -51,9 +51,9 @@ module "ecr" {
   source  = "terraform-aws-modules/ecr/aws"
   version = "1.6.0"
 
-  repository_name               = "dimav-ecr"
+  repository_name               = var.repository_name
   repository_lifecycle_policy   = var.ecr_lifecycle_policy
-  repository_image_scan_on_push = false
+  repository_image_scan_on_push = var.repository_image_scan_on_push
   tags                          = var.tags
 }
 
@@ -63,7 +63,9 @@ module "eks" {
 
   cluster_name                   = var.eks_cluster_name
   cluster_version                = var.eks_cluster_version
-  cluster_endpoint_public_access = true
+  cluster_endpoint_public_access = var.cluster_endpoint_public_access
+  cluster_encryption_config      = var.cluster_encryption_config
+  create_cloudwatch_log_group    = var.create_cloudwatch_log_group
   cluster_addons = {
     coredns = {
       most_recent = true
@@ -75,8 +77,9 @@ module "eks" {
       most_recent = true
     }
   }
-  vpc_id     = local.vpc_id
-  subnet_ids = concat(local.public_subnets_ids, local.private_subnets_ids)
+  vpc_id                    = local.vpc_id
+  subnet_ids                = concat(local.public_subnets_ids, local.private_subnets_ids)
+  cluster_service_ipv4_cidr = var.cluster_service_ipv4_cidr
 
   # EKS Managed Node Group(s)
   eks_managed_node_group_defaults = {
@@ -89,13 +92,12 @@ module "eks" {
       desired_size = 2
 
       instance_types = var.instance_types
-      #capacity_type  = "SPOT"
     }
   }
   create_kms_key = false
 
   # AWS-Auth configmap
-  /*manage_aws_auth_configmap = true
+  manage_aws_auth_configmap = true
   aws_auth_users = [
     {
       userarn  = "arn:aws:iam::097084951758:user/alex_b"
@@ -107,6 +109,6 @@ module "eks" {
       username = "varapai_d"
       groups   = ["system:masters"]
     },
-  ]*/
+  ]
   tags = var.tags
 }
