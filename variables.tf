@@ -112,6 +112,12 @@ variable "cluster_encryption_config" {
   default     = {}
 }
 
+variable "create_kms_key" {
+  description = "AWS Kubernetes cluster create kms key"
+  type        = bool
+  default     = false
+}
+
 variable "cluster_endpoint_public_access" {
   description = "AWS Kubernetes cluster endpoint public access"
   type        = bool
@@ -128,6 +134,24 @@ variable "create_cloudwatch_log_group" {
   description = "AWS Kubernetes cluster create cloudwatch log group"
   type        = bool
   default     = false
+}
+
+variable "ng_min_size" {
+  description = "AWS Kubernetes cluster ng min size"
+  type        = number
+  default     = 1
+}
+
+variable "ng_max_size" {
+  description = "AWS Kubernetes cluster ng max size"
+  type        = number
+  default     = 3
+}
+
+variable "ng_desired_size" {
+  description = "AWS Kubernetes cluster ng desired size"
+  type        = number
+  default     = 2
 }
 
 #-------- Deployment -----------

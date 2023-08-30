@@ -76,6 +76,7 @@ module "eks" {
     vpc-cni = {
       most_recent = true
     }
+
   }
   vpc_id                    = local.vpc_id
   subnet_ids                = concat(local.public_subnets_ids, local.private_subnets_ids)
@@ -87,28 +88,14 @@ module "eks" {
   }
   eks_managed_node_groups = {
     dimav_tf_ng = {
-      min_size     = 1
-      max_size     = 3
-      desired_size = 2
+      min_size     = var.ng_min_size
+      max_size     = var.ng_max_size
+      desired_size = var.ng_desired_size
 
       instance_types = var.instance_types
     }
   }
-  create_kms_key = false
+  create_kms_key = var.create_kms_key
 
-  # AWS-Auth configmap#
-  /* manage_aws_auth_configmap = true
-  aws_auth_users = [
-    {
-      userarn  = "arn:aws:iam::097084951758:user/alex_b"
-      username = "alex_b"
-      groups   = ["system:masters"]
-    },
-    {
-      userarn  = "arn:aws:iam::097084951758:user/varapai_d"
-      username = "varapai_d"
-      groups   = ["system:masters"]
-    },
-  ] */
   tags = var.tags
 }
