@@ -76,7 +76,7 @@ module "eks" {
     vpc-cni = {
       most_recent = true
     }
-
+#fgfdgd
   }
   vpc_id                    = local.vpc_id
   subnet_ids                = concat(local.public_subnets_ids, local.private_subnets_ids)
